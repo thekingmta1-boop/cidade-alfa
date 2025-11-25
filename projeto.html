@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alfa Roleplay MTA - Loja Oficial</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #000007;
+            --secondary: #16213e;
+            --accent: #0fcc45;
+            --accent-hover: #0daa3a;
+            --text: #ffffff;
+            --text-secondary: #b0b0b0;
+            --card-bg: #1e2a47;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --vip-bronze: #cd7f32;
+            --vip-silver: #c0c0c0;
+            --vip-gold: #ffd700;
+            --vip-diamond: #b9f2ff;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: var(--text);
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+            color: var(--accent);
+        }
+
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--accent), #2ecc71);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 8px 15px;
+            border-radius: 5px;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--accent);
+            background: rgba(15, 204, 69, 0.1);
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-outline:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            margin: 30px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80') center/cover;
+            opacity: 0.2;
+            z-index: -1;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, var(--accent), #2ecc71);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: var(--text-secondary);
+        }
+
+        /* Login Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .close-modal:hover {
+            color: var(--text);
+        }
+
+        .modal h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--accent);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            color: var(--text);
+            font-size: 1rem;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        /* Products Section */
+        .section-title {
+            text-align: center;
+            margin: 40px 0 30px;
+            font-size: 2rem;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .product-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .vip-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+        }
+
+        .vip-bronze {
+            background: linear-gradient(45deg, var(--vip-bronze), #a56a2a);
+        }
+
+        .vip-silver {
+            background: linear-gradient(45deg, var(--vip-silver), #a8a8a8);
+            color: #333;
+        }
+
+        .vip-gold {
+            background: linear-gradient(45deg, var(--vip-gold), #d4af37);
+            color: #333;
+        }
+
+        .vip-diamond {
+            background: linear-gradient(45deg, var(--vip-diamond), #6ec4db);
+            color: #333;
+        }
+
+        .product-body {
+            padding: 20px;
+        }
+
+        .product-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .product-price {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 15px 0;
+            color: var(--accent);
+        }
+
+        .product-features {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .product-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .product-features li i {
+            color: var(--accent);
+        }
+
+        .product-footer {
+            padding: 0 20px 20px;
+            text-align: center;
+        }
+
+        /* Coins Selection */
+        .coins-selection {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .coin-option {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+            background: var(--card-bg);
+        }
+
+        .coin-option:hover {
+            transform: scale(1.05);
+        }
+
+        .coin-option.selected {
+            border-color: var(--accent);
+            background: rgba(15, 204, 69, 0.1);
+        }
+
+        .coin-amount {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .coin-price {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Cart */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            background: var(--card-bg);
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.5);
+            transition: right 0.3s;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-sidebar.open {
+            right: 0;
+        }
+
+        .cart-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-body {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .cart-item-info h4 {
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .cart-item-remove {
+            color: var(--danger);
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+        }
+
+        .cart-footer {
+            padding: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .cart-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+
+        .cart-empty i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--text-secondary);
+        }
+
+        /* User Profile */
+        .user-profile {
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .user-name {
+            font-weight: 500;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px 0;
+            margin-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--accent);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav ul {
+                gap: 10px;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cart-sidebar {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <div class="logo-text">Alfa Roleplay MTA</div>
+            </div>
+            
+            <nav>
+                <ul>
+                    <li><a href="#" class="active">Início</a></li>
+                    <li><a href="#vips">VIPs</a></li>
+                    <li><a href="#coins">Coins</a></li>
+                    <li><a href="#suporte">Suporte</a></li>
+                </ul>
+            </nav>
+            
+            <div class="user-actions">
+                <div class="user-profile" id="userProfile">
+                    <div class="user-avatar" id="userAvatar">U</div>
+                    <div class="user-name" id="userName">Usuário</div>
+                </div>
+                <button class="btn btn-outline" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Entrar
+                </button>
+                <button class="btn btn-primary" id="cartBtn">
+                    <i class="fas fa-shopping-cart"></i> <span id="cartCount">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Alfa Roleplay MTA</h1>
+            <p>Adquira VIPs e Coins para melhorar sua experiência no servidor. Tenha vantagens exclusivas e itens especiais!</p>
+            <button class="btn btn-primary">
+                <i class="fas fa-gamepad"></i> Conhecer o Servidor
+            </button>
+        </div>
+    </section>
+
+    <!-- VIPs Section -->
+    <section class="container" id="vips">
+        <h2 class="section-title">Planos VIP</h2>
+        <div class="products-grid">
+            <!-- VIP Bronze -->
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="vip-badge vip-bronze">VIP Bronze</span>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-title">Bronze</h3>
+                    <div class="product-price">R$ 14,90</div>
+                    <ul class="product-features">
+                        <li><i class="fas fa-check"></i> Tag VIP no jogo</li>
+                        <li><i class="fas fa-check"></i> 50.000$ in-game</li>
+                        <li><i class="fas fa-check"></i> 2 Slots de propriedade</li>
+                        <li><i class="fas fa-check"></i> Acesso a /v</li>
+                        <li><i class="fas fa-times"></i> Veículo VIP</li>
+                    </ul>
+                </div>
+                <div class="product-footer">
+                    <button class="btn btn-primary add-to-cart" data-product="VIP Bronze" data-price="14.90">
+                        <i class="fas fa-cart-plus"></i> Adicionar ao Carrinho
+                    </button>
+                </div>
+            </div>
+
+            <!-- VIP Prata -->
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="vip-badge vip-silver">VIP Prata</span>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-title">Prata</h3>
+                    <div class="product-price">R$ 29,90</div>
+                    <ul class="product-features">
+                        <li><i class="fas fa-check"></i> Tag VIP no jogo</li>
+                        <li><i class="fas fa-check"></i> 150.000$ in-game</li>
+                        <li><i class="fas fa-check"></i> 4 Slots de propriedade</li>
+                        <li><i class="fas fa-check"></i> Acesso a /v</li>
+                        <li><i class="fas fa-check"></i> Veículo VIP</li>
+                    </ul>
+                </div>
+                <div class="product-footer">
+                    <button class="btn btn-primary add-to-cart" data-product="VIP Prata" data-price="29.90">
+                        <i class="fas fa-cart-plus"></i> Adicionar ao Carrinho
+                    </button>
+                </div>
+            </div>
+
+            <!-- VIP Ouro -->
+            <div class="product-card">
+                <div class="product-header">
+                    <span class="vip-badge vip-gold">VIP Ouro</span>
+                </div>
+                <div class="product-body">
+                    <h3 class="product-title">Ouro</h3>
+                    <div class="product-price">R$ 49,90</div>
+                    <ul class="product-features">
+                        <li><i class="fas fa-check"></i> Tag VIP no jogo</li>
+                        <li><i class="fas fa-check"></i> 300.000$ in-game</li>
+                        <li><i class="fas fa-check"></i> 6 Slots de propriedade</li>
+                        <li><i class="fas fa-check"></i> Acesso a /v</li>
+                        <li><i class="fas fa-check"></i> 2 Veículos VIP</li>
+                    </ul>
+                </div>
+                <div class="product-footer">
+                    <button class="btn btn-primary add-to-cart" data-product="VIP Ouro" data-price="49.90">
+                        <i class="fas fa-cart-plus"></i> Adicionar ao Carrinho
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Coins Section -->
+    <section class="container" id="coins">
+        <h2 class="section-title">Coins</h2>
+        <p style="text-align: center; margin-bottom: 30px; color: var(--text-secondary);">
+            Compre coins para utilizar em nossa loja interna do servidor. Cada coin custa R$ 1,00.
+        </p>
+        
+        <div class="coins-selection" id="coinsSelection">
+            <!-- As opções de coins serão geradas via JavaScript -->
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn btn-primary" id="addCoinsToCart" disabled>
+                <i class="fas fa-cart-plus"></i> Adicionar Coins ao Carrinho
+            </button>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <h2>Entrar na Loja</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Usuário</label>
+                    <input type="text" id="username" class="form-control" placeholder="Digite seu usuário" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Senha</label>
+                    <input type="password" id="password" class="form-control" placeholder="Digite sua senha" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-sign-in-alt"></i> Entrar
+                </button>
+            </form>
+            <p style="text-align: center; margin-top: 20px; color: var(--text-secondary);">
+                Não tem conta? <a href="#" style="color: var(--accent);">Registre-se no servidor</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>Seu Carrinho</h3>
+            <button class="btn btn-outline" id="closeCart">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="cart-body" id="cartBody">
+            <!-- Itens do carrinho serão inseridos aqui -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">R$ 0,00</span>
+            </div>
+            <button class="btn btn-primary" style="width: 100%;" id="checkoutBtn">
+                <i class="fas fa-credit-card"></i> Finalizar Compra
+            </button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Alfa Roleplay MTA</h3>
+                    <p>O melhor servidor de Roleplay do MTA. Junte-se a nossa comunidade e viva experiências únicas!</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Links Rápidos</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Início</a></li>
+                        <li><a href="#vips">VIPs</a></li>
+                        <li><a href="#coins">Coins</a></li>
+                        <li><a href="#">Suporte</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Suporte</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Central de Ajuda</a></li>
+                        <li><a href="#">Status do Servidor</a></li>
+                        <li><a href="#">Política de Reembolso</a></li>
+                        <li><a href="#">Termos de Serviço</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2023 Alfa Roleplay MTA. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dados da aplicação
+        let currentUser = null;
+        let cart = [];
+        let selectedCoins = 0;
+
+        // Elementos DOM
+        const loginBtn = document.getElementById('loginBtn');
+        const loginModal = document.getElementById('loginModal');
+        const closeModal = document.getElementById('closeModal');
+        const loginForm = document.getElementById('loginForm');
+        const userProfile = document.getElementById('userProfile');
+        const userAvatar = document.getElementById('userAvatar');
+        const userName = document.getElementById('userName');
+        const cartBtn = document.getElementById('cartBtn');
+        const cartSidebar = document.getElementById('cartSidebar');
+        const closeCart = document.getElementById('closeCart');
+        const cartBody = document.getElementById('cartBody');
+        const cartTotal = document.getElementById('cartTotal');
+        const cartCount = document.getElementById('cartCount');
+        const coinsSelection = document.getElementById('coinsSelection');
+        const addCoinsToCart = document.getElementById('addCoinsToCart');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+
+        // Opções de coins
+        const coinOptions = [50, 100, 200, 500, 1000, 2000];
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeCoinSelection();
+            setupEventListeners();
+            loadCartFromStorage();
+            updateCartUI();
+        });
+
+        // Configurar seleção de coins
+        function initializeCoinSelection() {
+            coinsSelection.innerHTML = '';
+            
+            coinOptions.forEach(coins => {
+                const price = coins; // 1 coin = R$ 1,00
+                const option = document.createElement('div');
+                option.className = 'coin-option';
+                option.innerHTML = `
+                    <div class="coin-amount">${coins}</div>
+                    <div class="coin-price">R$ ${price},00</div>
+                `;
+                
+                option.addEventListener('click', () => {
+                    document.querySelectorAll('.coin-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    option.classList.add('selected');
+                    selectedCoins = coins;
+                    addCoinsToCart.disabled = false;
+                });
+                
+                coinsSelection.appendChild(option);
+            });
+        }
+
+        // Configurar event listeners
+        function setupEventListeners() {
+            // Login
+            loginBtn.addEventListener('click', () => {
+                loginModal.style.display = 'flex';
+            });
+
+            closeModal.addEventListener('click', () => {
+                loginModal.style.display = 'none';
+            });
+
+            loginForm.addEventListener('submit', handleLogin);
+
+            // Carrinho
+            cartBtn.addEventListener('click', () => {
+                cartSidebar.classList.add('open');
+            });
+
+            closeCart.addEventListener('click', () => {
+                cartSidebar.classList.remove('open');
+            });
+
+            // Adicionar ao carrinho - VIPs
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', function() {
+                    const product = this.getAttribute('data-product');
+                    const price = parseFloat(this.getAttribute('data-price'));
+                    addToCart(product, price);
+                });
+            });
+
+            // Adicionar coins ao carrinho
+            addCoinsToCart.addEventListener('click', () => {
+                if (selectedCoins > 0) {
+                    addToCart(`${selectedCoins} Coins`, selectedCoins);
+                    // Reset selection
+                    document.querySelectorAll('.coin-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    selectedCoins = 0;
+                    addCoinsToCart.disabled = true;
+                }
+            });
+
+            // Finalizar compra
+            checkoutBtn.addEventListener('click', handleCheckout);
+
+            // Fechar modal ao clicar fora
+            window.addEventListener('click', (e) => {
+                if (e.target === loginModal) {
+                    loginModal.style.display = 'none';
+                }
+            });
+        }
+
+        // Manipular login
+        function handleLogin(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Simulação de login (em um sistema real, isso seria uma requisição para o servidor)
+            if (username && password) {
+                currentUser = {
+                    username: username,
+                    initial: username.charAt(0).toUpperCase()
+                };
+                
+                userAvatar.textContent = currentUser.initial;
+                userName.textContent = currentUser.username;
+                userProfile.style.display = 'flex';
+                loginBtn.style.display = 'none';
+                
+                loginModal.style.display = 'none';
+                loginForm.reset();
+                
+                // Mostrar mensagem de sucesso
+                alert(`Bem-vindo, ${username}!`);
+            } else {
+                alert('Por favor, preencha todos os campos.');
+            }
+        }
+
+        // Adicionar item ao carrinho
+        function addToCart(product, price) {
+            if (!currentUser) {
+                alert('Por favor, faça login para adicionar itens ao carrinho.');
+                loginModal.style.display = 'flex';
+                return;
+            }
+            
+            cart.push({ product, price });
+            saveCartToStorage();
+            updateCartUI();
+            
+            // Mostrar feedback
+            alert(`${product} adicionado ao carrinho!`);
+            
+            // Abrir carrinho automaticamente
+            cartSidebar.classList.add('open');
+        }
+
+        // Remover item do carrinho
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            saveCartToStorage();
+            updateCartUI();
+        }
+
+        // Atualizar interface do carrinho
+        function updateCartUI() {
+            // Atualizar contador
+            cartCount.textContent = cart.length;
+            
+            // Atualizar lista de itens
+            cartBody.innerHTML = '';
+            
+            if (cart.length === 0) {
+                cartBody.innerHTML = `
+                    <div class="cart-empty">
+                        <i class="fas fa-shopping-cart"></i>
+                        <p>Seu carrinho está vazio</p>
+                    </div>
+                `;
+            } else {
+                let total = 0;
+                
+                cart.forEach((item, index) => {
+                    total += item.price;
+                    
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    cartItem.innerHTML = `
+                        <div class="cart-item-info">
+                            <h4>${item.product}</h4>
+                            <div class="cart-item-price">R$ ${item.price.toFixed(2)}</div>
+                        </div>
+                        <button class="cart-item-remove" data-index="${index}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    `;
+                    
+                    cartBody.appendChild(cartItem);
+                });
+                
+                // Adicionar event listeners para botões de remover
+                document.querySelectorAll('.cart-item-remove').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const index = parseInt(this.getAttribute('data-index'));
+                        removeFromCart(index);
+                    });
+                });
+                
+                // Atualizar total
+                cartTotal.textContent = `R$ ${total.toFixed(2)}`;
+            }
+        }
+
+        // Manipular finalização de compra
+        function handleCheckout() {
+            if (cart.length === 0) {
+                alert('Seu carrinho está vazio.');
+                return;
+            }
+            
+            if (!currentUser) {
+                alert('Por favor, faça login para finalizar a compra.');
+                loginModal.style.display = 'flex';
+                return;
+            }
+            
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            
+            // Simulação de processamento de pagamento
+            alert(`Compra finalizada com sucesso!\nTotal: R$ ${total.toFixed(2)}\n\nEm um sistema real, aqui seria integrado com um gateway de pagamento.`);
+            
+            // Limpar carrinho
+            cart = [];
+            saveCartToStorage();
+            updateCartUI();
+            cartSidebar.classList.remove('open');
+        }
+
+        // Salvar carrinho no localStorage
+        function saveCartToStorage() {
+            localStorage.setItem('alfaRoleplayCart', JSON.stringify(cart));
+        }
+
+        // Carregar carrinho do localStorage
+        function loadCartFromStorage() {
+            const savedCart = localStorage.getItem('alfaRoleplayCart');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+            }
+        }
+    </script>
+</body>
+</html>

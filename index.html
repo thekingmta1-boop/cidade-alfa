@@ -1,0 +1,2094 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EbookStore - Sua Loja de Ebooks</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #7209b7;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4cc9f0;
+            --danger: #f72585;
+            --warning: #f8961e;
+            --info: #4895ef;
+            --transition: all 0.3s ease;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+        }
+
+        .dark-mode {
+            --primary: #4895ef;
+            --secondary: #3a0ca3;
+            --accent: #7209b7;
+            --light: #121212;
+            --dark: #f8f9fa;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            transition: var(--transition);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header e Navegação */
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 20px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: var(--radius);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+        }
+
+        nav ul li a i {
+            margin-right: 5px;
+        }
+
+        nav ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .user-actions button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            margin-left: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 8px;
+            border-radius: 50%;
+        }
+
+        .user-actions button:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .cart-count {
+            background-color: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            position: absolute;
+            top: -5px;
+            right: -5px;
+        }
+
+        .cart-icon {
+            position: relative;
+        }
+
+        /* Páginas */
+        .page {
+            display: none;
+            padding: 30px 0;
+            min-height: calc(100vh - 140px);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Login e Registro */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+        }
+
+        .auth-card {
+            background-color: var(--light);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .auth-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: var(--transition);
+            border-bottom: 2px solid transparent;
+        }
+
+        .auth-tab.active {
+            border-bottom: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--radius);
+            background-color: var(--light);
+            color: var(--dark);
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: var(--radius);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #d1144a;
+        }
+
+        .social-login {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .social-login p {
+            margin-bottom: 15px;
+            position: relative;
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        .social-login p::before,
+        .social-login p::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .social-login p::before {
+            left: 0;
+        }
+
+        .social-login p::after {
+            right: 0;
+        }
+
+        .social-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            transition: var(--transition);
+        }
+
+        .social-btn.google {
+            background-color: #db4437;
+        }
+
+        .social-btn.facebook {
+            background-color: #4267B2;
+        }
+
+        .social-btn.twitter {
+            background-color: #1DA1F2;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Página Principal */
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 60px 0;
+            border-radius: var(--radius);
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="%23ffffff" fill-opacity="0.1" d="M0,96L48,112C96,128,192,160,288,186.7C384,213,480,235,576,213.3C672,192,768,128,864,128C960,128,1056,192,1152,192C1248,192,1344,128,1392,96L1440,64L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>');
+            background-size: cover;
+            background-position: bottom;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            animation: slideInFromTop 0.8s ease;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 25px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: slideInFromTop 0.8s ease 0.2s both;
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            position: relative;
+            animation: slideInFromTop 0.8s ease 0.4s both;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border-radius: 50px;
+            border: none;
+            font-size: 1rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .search-btn:hover {
+            background-color: var(--secondary);
+            transform: rotate(15deg);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--primary);
+            border-radius: 3px;
+        }
+
+        .ebooks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .ebook-card {
+            background-color: var(--light);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .ebook-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .ebook-image {
+            height: 180px;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ebook-image::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(0,0,0,0.1));
+        }
+
+        .ebook-content {
+            padding: 20px;
+        }
+
+        .ebook-title {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .ebook-author {
+            color: rgba(0, 0, 0, 0.6);
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .ebook-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .ebook-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn-sm {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+
+        /* Carrinho */
+        .cart-items {
+            margin-bottom: 30px;
+        }
+
+        .cart-item {
+            display: flex;
+            background-color: var(--light);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow);
+            align-items: center;
+        }
+
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            background-color: var(--primary);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-right: 20px;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .cart-item-actions {
+            display: flex;
+            align-items: center;
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            margin-right: 20px;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .quantity-btn:hover {
+            background-color: rgba(0, 0, 0, 0.2);
+        }
+
+        .quantity {
+            margin: 0 10px;
+            font-weight: 600;
+        }
+
+        .cart-summary {
+            background-color: var(--light);
+            border-radius: var(--radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .summary-total {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .payment-methods {
+            margin-top: 30px;
+        }
+
+        .payment-title {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .payment-options {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .payment-option {
+            flex: 1;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: var(--radius);
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .payment-option:hover, .payment-option.selected {
+            border-color: var(--primary);
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+
+        .payment-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        /* Configurações */
+        .settings-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+        }
+
+        .settings-menu {
+            background-color: var(--light);
+            border-radius: var(--radius);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+
+        .settings-menu-item {
+            padding: 12px 15px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: var(--transition);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+        }
+
+        .settings-menu-item i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .settings-menu-item:hover, .settings-menu-item.active {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+
+        .settings-content {
+            background-color: var(--light);
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .settings-section {
+            display: none;
+        }
+
+        .settings-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .profile-picture {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            margin-right: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: var(--transition);
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: var(--transition);
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .help-content {
+            line-height: 1.6;
+        }
+
+        .help-section {
+            margin-bottom: 30px;
+        }
+
+        .help-section h3 {
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        .help-section ul {
+            padding-left: 20px;
+        }
+
+        .help-section li {
+            margin-bottom: 8px;
+        }
+
+        .contact-link {
+            display: inline-flex;
+            align-items: center;
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            border-radius: var(--radius);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+
+        .contact-link:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-link i {
+            margin-right: 8px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: var(--light);
+            padding: 40px 0 20px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .footer-column h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--primary);
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-column ul li a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Animações */
+        @keyframes slideInFromTop {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            nav ul li {
+                margin: 5px;
+            }
+
+            .settings-container {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .ebooks-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+
+            .payment-options {
+                flex-direction: column;
+            }
+
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .cart-item-image {
+                margin-bottom: 15px;
+            }
+
+            .cart-item-actions {
+                width: 100%;
+                justify-content: space-between;
+                margin-top: 15px;
+            }
+        }
+
+        /* Notificações */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: var(--radius);
+            color: white;
+            font-weight: 500;
+            box-shadow: var(--shadow);
+            z-index: 1001;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background-color: var(--success);
+        }
+
+        .notification.error {
+            background-color: var(--danger);
+        }
+
+        .notification.info {
+            background-color: var(--info);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1002;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background-color: var(--light);
+            border-radius: var(--radius);
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: slideInFromTop 0.3s ease;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: rgba(0, 0, 0, 0.5);
+            transition: var(--transition);
+        }
+
+        .modal-close:hover {
+            color: var(--danger);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-book"></i>
+                    <span>EbookStore</span>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#" class="nav-link" data-page="home"><i class="fas fa-home"></i> Início</a></li>
+                        <li><a href="#" class="nav-link" data-page="cart"><i class="fas fa-shopping-cart"></i> Carrinho</a></li>
+                        <li><a href="#" class="nav-link" data-page="settings"><i class="fas fa-cog"></i> Configurações</a></li>
+                    </ul>
+                </nav>
+                <div class="user-actions">
+                    <button id="theme-toggle" title="Alternar tema">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="cart-icon" id="cart-btn" title="Carrinho">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count">0</span>
+                    </button>
+                    <button id="user-btn" title="Minha conta">
+                        <i class="fas fa-user"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Páginas -->
+    <main class="container">
+        <!-- Página de Login/Registro -->
+        <section id="auth-page" class="page active">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <div class="auth-tabs">
+                        <div class="auth-tab active" data-tab="login">Entrar</div>
+                        <div class="auth-tab" data-tab="register">Criar Conta</div>
+                    </div>
+                    
+                    <form id="login-form" class="auth-form active">
+                        <div class="form-group">
+                            <label for="login-email">E-mail</label>
+                            <input type="email" id="login-email" placeholder="seu@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Senha</label>
+                            <input type="password" id="login-password" placeholder="Sua senha" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Entrar</button>
+                        
+                        <div class="social-login">
+                            <p>Ou entre com</p>
+                            <div class="social-buttons">
+                                <div class="social-btn google">
+                                    <i class="fab fa-google"></i>
+                                </div>
+                                <div class="social-btn facebook">
+                                    <i class="fab fa-facebook-f"></i>
+                                </div>
+                                <div class="social-btn twitter">
+                                    <i class="fab fa-twitter"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    
+                    <form id="register-form" class="auth-form">
+                        <div class="form-group">
+                            <label for="register-name">Nome completo</label>
+                            <input type="text" id="register-name" placeholder="Seu nome completo" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-email">E-mail</label>
+                            <input type="email" id="register-email" placeholder="seu@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-password">Senha</label>
+                            <input type="password" id="register-password" placeholder="Crie uma senha" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="register-confirm">Confirmar senha</label>
+                            <input type="password" id="register-confirm" placeholder="Confirme sua senha" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Criar Conta</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Página Principal -->
+        <section id="home-page" class="page">
+            <div class="hero">
+                <div class="hero-content">
+                    <h1>Descubra Milhares de Ebooks Incríveis</h1>
+                    <p>Encontre os melhores livros digitais para expandir seus conhecimentos e entretenimento.</p>
+                </div>
+            </div>
+            
+            <div class="search-container">
+                <input type="text" class="search-input" id="search-input" placeholder="Pesquisar ebooks...">
+                <button class="search-btn" id="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+            
+            <h2 class="section-title">Ebooks em Destaque</h2>
+            <div class="ebooks-grid" id="featured-ebooks">
+                <!-- Ebooks serão inseridos via JavaScript -->
+            </div>
+            
+            <h2 class="section-title">Mais Vendidos</h2>
+            <div class="ebooks-grid" id="bestseller-ebooks">
+                <!-- Ebooks serão inseridos via JavaScript -->
+            </div>
+        </section>
+
+        <!-- Página do Carrinho -->
+        <section id="cart-page" class="page">
+            <h2 class="section-title">Meu Carrinho</h2>
+            
+            <div class="cart-items" id="cart-items">
+                <!-- Itens do carrinho serão inseridos via JavaScript -->
+            </div>
+            
+            <div class="cart-summary">
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span id="cart-subtotal">R$ 0,00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Desconto:</span>
+                    <span id="cart-discount">R$ 0,00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Frete:</span>
+                    <span id="cart-shipping">R$ 0,00</span>
+                </div>
+                <div class="summary-row summary-total">
+                    <span>Total:</span>
+                    <span id="cart-total">R$ 0,00</span>
+                </div>
+                
+                <div class="payment-methods">
+                    <h3 class="payment-title">Método de Pagamento</h3>
+                    <div class="payment-options">
+                        <div class="payment-option" data-method="credit">
+                            <div class="payment-icon">
+                                <i class="far fa-credit-card"></i>
+                            </div>
+                            <div>Cartão de Crédito</div>
+                        </div>
+                        <div class="payment-option" data-method="debit">
+                            <div class="payment-icon">
+                                <i class="fas fa-credit-card"></i>
+                            </div>
+                            <div>Cartão de Débito</div>
+                        </div>
+                        <div class="payment-option" data-method="pix">
+                            <div class="payment-icon">
+                                <i class="fas fa-barcode"></i>
+                            </div>
+                            <div>PIX</div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="checkout-btn" style="width: 100%;">Finalizar Compra</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Página de Configurações -->
+        <section id="settings-page" class="page">
+            <h2 class="section-title">Configurações</h2>
+            
+            <div class="settings-container">
+                <div class="settings-menu">
+                    <div class="settings-menu-item active" data-section="profile">
+                        <i class="fas fa-user"></i> Perfil
+                    </div>
+                    <div class="settings-menu-item" data-section="appearance">
+                        <i class="fas fa-palette"></i> Aparência
+                    </div>
+                    <div class="settings-menu-item" data-section="help">
+                        <i class="fas fa-question-circle"></i> Ajuda
+                    </div>
+                </div>
+                
+                <div class="settings-content">
+                    <!-- Seção de Perfil -->
+                    <div class="settings-section active" id="profile-section">
+                        <h3>Editar Perfil</h3>
+                        
+                        <div class="profile-picture">
+                            <div class="profile-img">
+                                <i class="fas fa-user" id="profile-icon"></i>
+                                <img id="profile-picture" style="display: none;">
+                            </div>
+                            <div class="profile-actions">
+                                <button class="btn btn-secondary" id="upload-picture">
+                                    <i class="fas fa-upload"></i> Carregar Foto
+                                </button>
+                                <input type="file" id="picture-input" accept="image/*" style="display: none;">
+                                <button class="btn btn-secondary" id="remove-picture">
+                                    <i class="fas fa-trash"></i> Remover
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <form id="profile-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="profile-name">Nome completo</label>
+                                    <input type="text" id="profile-name" placeholder="Seu nome completo">
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-email">E-mail</label>
+                                    <input type="email" id="profile-email" placeholder="seu@email.com">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="profile-phone">Telefone</label>
+                                    <input type="tel" id="profile-phone" placeholder="(00) 00000-0000">
+                                </div>
+                                <div class="form-group">
+                                    <label for="profile-birth">Data de nascimento</label>
+                                    <input type="date" id="profile-birth">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="profile-bio">Biografia</label>
+                                <textarea id="profile-bio" placeholder="Conte um pouco sobre você..." style="width: 100%; height: 100px; padding: 12px 15px; border: 1px solid rgba(0, 0, 0, 0.1); border-radius: var(--radius); resize: vertical;"></textarea>
+                            </div>
+                            
+                            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                        </form>
+                    </div>
+                    
+                    <!-- Seção de Aparência -->
+                    <div class="settings-section" id="appearance-section">
+                        <h3>Preferências de Aparência</h3>
+                        
+                        <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                            <div>
+                                <label for="dark-mode-toggle" style="margin-bottom: 0;">Modo Escuro</label>
+                                <p style="font-size: 0.9rem; color: rgba(0, 0, 0, 0.6); margin-top: 5px;">Ative o modo escuro para uma experiência visual mais confortável.</p>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="dark-mode-toggle">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="font-size">Tamanho da Fonte</label>
+                            <select id="font-size" style="width: 100%; padding: 12px 15px; border: 1px solid rgba(0, 0, 0, 0.1); border-radius: var(--radius); background-color: var(--light); color: var(--dark);">
+                                <option value="small">Pequeno</option>
+                                <option value="medium" selected>Médio</option>
+                                <option value="large">Grande</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="language">Idioma</label>
+                            <select id="language" style="width: 100%; padding: 12px 15px; border: 1px solid rgba(0, 0, 0, 0.1); border-radius: var(--radius); background-color: var(--light); color: var(--dark);">
+                                <option value="pt-br" selected>Português (Brasil)</option>
+                                <option value="en">English</option>
+                                <option value="es">Español</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Seção de Ajuda -->
+                    <div class="settings-section" id="help-section">
+                        <h3>Central de Ajuda</h3>
+                        
+                        <div class="help-content">
+                            <div class="help-section">
+                                <h3>Perguntas Frequentes</h3>
+                                <ul>
+                                    <li><strong>Como faço para comprar um ebook?</strong><br>Navegue pela nossa biblioteca, adicione os ebooks desejados ao carrinho e finalize a compra.</li>
+                                    <li><strong>Quais formatos de ebook são suportados?</strong><br>Oferecemos ebooks nos formatos PDF, EPUB e MOBI.</li>
+                                    <li><strong>Posso ler meus ebooks em qualquer dispositivo?</strong><br>Sim, nossos ebooks são compatíveis com smartphones, tablets e computadores.</li>
+                                    <li><strong>Como faço para redefinir minha senha?</strong><br>Clique em "Esqueci minha senha" na página de login.</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="help-section">
+                                <h3>Precisa de mais ajuda?</h3>
+                                <p>Entre em contato conosco através do WhatsApp para suporte personalizado.</p>
+                                <a href="https://wa.me/5546999083346" class="contact-link" target="_blank">
+                                    <i class="fab fa-whatsapp"></i> Falar no WhatsApp
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>EbookStore</h3>
+                    <p>Sua loja de confiança para ebooks de qualidade. Oferecemos uma vasta seleção de títulos para todos os gostos.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Links Rápidos</h3>
+                    <ul>
+                        <li><a href="#">Início</a></li>
+                        <li><a href="#">Sobre Nós</a></li>
+                        <li><a href="#">Catálogo</a></li>
+                        <li><a href="#">Promoções</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Suporte</h3>
+                    <ul>
+                        <li><a href="#">Central de Ajuda</a></li>
+                        <li><a href="#">Política de Privacidade</a></li>
+                        <li><a href="#">Termos de Uso</a></li>
+                        <li><a href="#">Contato</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contato</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> contato@ebookstore.com</li>
+                        <li><i class="fas fa-phone"></i> (46) 99908-3346</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Paraná, Brasil</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 EbookStore. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notificações -->
+    <div class="notification" id="notification"></div>
+
+    <!-- Modal de Pagamento -->
+    <div class="modal" id="payment-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="payment-close">&times;</button>
+            <h3 class="modal-title">Finalizar Compra</h3>
+            <form id="payment-form">
+                <div class="form-group">
+                    <label for="card-name">Nome no Cartão</label>
+                    <input type="text" id="card-name" placeholder="Como está no cartão" required>
+                </div>
+                <div class="form-group">
+                    <label for="card-number">Número do Cartão</label>
+                    <input type="text" id="card-number" placeholder="0000 0000 0000 0000" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="card-expiry">Validade</label>
+                        <input type="text" id="card-expiry" placeholder="MM/AA" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="card-cvv">CVV</label>
+                        <input type="text" id="card-cvv" placeholder="123" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="card-installments">Parcelas</label>
+                    <select id="card-installments" required>
+                        <option value="">Selecione</option>
+                        <option value="1">1x de R$ 0,00</option>
+                        <option value="2">2x de R$ 0,00</option>
+                        <option value="3">3x de R$ 0,00</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Pagar Agora</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Dados de exemplo para ebooks
+        const ebooks = [
+            {
+                id: 1,
+                title: "Dom Casmurro",
+                author: "Machado de Assis",
+                price: 19.90,
+                category: "Literatura Brasileira",
+                description: "Um clássico da literatura brasileira que explora ciúme e traição.",
+                icon: "fas fa-book"
+            },
+            {
+                id: 2,
+                title: "O Cortiço",
+                author: "Aluísio Azevedo",
+                price: 24.90,
+                category: "Literatura Brasileira",
+                description: "Romance naturalista que retrata a vida em um cortiço carioca.",
+                icon: "fas fa-home"
+            },
+            {
+                id: 3,
+                title: "A Moreninha",
+                author: "Joaquim Manuel de Macedo",
+                price: 14.90,
+                category: "Romance",
+                description: "Primeiro romance romântico da literatura brasileira.",
+                icon: "fas fa-heart"
+            },
+            {
+                id: 4,
+                title: "Iracema",
+                author: "José de Alencar",
+                price: 16.90,
+                category: "Romance Indianista",
+                description: "Lenda do Ceará que narra o amor entre uma índia e um português.",
+                icon: "fas fa-leaf"
+            },
+            {
+                id: 5,
+                title: "Memórias Póstumas de Brás Cubas",
+                author: "Machado de Assis",
+                price: 22.90,
+                category: "Literatura Brasileira",
+                description: "Narrado por um defunto autor, este livro é uma sátira social.",
+                icon: "fas fa-ghost"
+            },
+            {
+                id: 6,
+                title: "O Guarani",
+                author: "José de Alencar",
+                price: 18.90,
+                category: "Romance Indianista",
+                description: "História de amor entre o índio Peri e a branca Ceci.",
+                icon: "fas fa-feather-alt"
+            },
+            {
+                id: 7,
+                title: "O Mulato",
+                author: "Aluísio Azevedo",
+                price: 21.90,
+                category: "Literatura Brasileira",
+                description: "Romance que aborda o preconceito racial no Brasil do século XIX.",
+                icon: "fas fa-user-friends"
+            },
+            {
+                id: 8,
+                title: "O Triste Fim de Policarpo Quaresma",
+                author: "Lima Barreto",
+                price: 17.90,
+                category: "Literatura Brasileira",
+                description: "Sátira sobre o patriotismo exagerado e a burocracia.",
+                icon: "fas fa-flag"
+            }
+        ];
+
+        // Estado da aplicação
+        const state = {
+            user: null,
+            cart: [],
+            darkMode: false,
+            currentPage: 'auth',
+            currentSettingsSection: 'profile'
+        };
+
+        // Elementos DOM
+        const pages = document.querySelectorAll('.page');
+        const navLinks = document.querySelectorAll('.nav-link');
+        const authTabs = document.querySelectorAll('.auth-tab');
+        const authForms = document.querySelectorAll('.auth-form');
+        const themeToggle = document.getElementById('theme-toggle');
+        const cartCount = document.querySelector('.cart-count');
+        const cartItems = document.getElementById('cart-items');
+        const cartSubtotal = document.getElementById('cart-subtotal');
+        const cartDiscount = document.getElementById('cart-discount');
+        const cartShipping = document.getElementById('cart-shipping');
+        const cartTotal = document.getElementById('cart-total');
+        const checkoutBtn = document.getElementById('checkout-btn');
+        const paymentOptions = document.querySelectorAll('.payment-option');
+        const settingsMenuItems = document.querySelectorAll('.settings-menu-item');
+        const settingsSections = document.querySelectorAll('.settings-section');
+        const profileForm = document.getElementById('profile-form');
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+        const uploadPictureBtn = document.getElementById('upload-picture');
+        const pictureInput = document.getElementById('picture-input');
+        const removePictureBtn = document.getElementById('remove-picture');
+        const profilePicture = document.getElementById('profile-picture');
+        const profileIcon = document.getElementById('profile-icon');
+        const searchInput = document.getElementById('search-input');
+        const searchBtn = document.getElementById('search-btn');
+        const featuredEbooks = document.getElementById('featured-ebooks');
+        const bestsellerEbooks = document.getElementById('bestseller-ebooks');
+        const notification = document.getElementById('notification');
+        const paymentModal = document.getElementById('payment-modal');
+        const paymentClose = document.getElementById('payment-close');
+        const paymentForm = document.getElementById('payment-form');
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', initApp);
+
+        function initApp() {
+            // Verificar se há usuário logado
+            const savedUser = localStorage.getItem('ebookstore_user');
+            if (savedUser) {
+                state.user = JSON.parse(savedUser);
+                showPage('home');
+            }
+
+            // Verificar modo escuro salvo
+            const savedDarkMode = localStorage.getItem('ebookstore_darkmode');
+            if (savedDarkMode === 'true') {
+                state.darkMode = true;
+                document.body.classList.add('dark-mode');
+                darkModeToggle.checked = true;
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            }
+
+            // Carregar carrinho salvo
+            const savedCart = localStorage.getItem('ebookstore_cart');
+            if (savedCart) {
+                state.cart = JSON.parse(savedCart);
+                updateCartCount();
+                updateCartDisplay();
+            }
+
+            // Carregar ebooks
+            renderEbooks();
+
+            // Configurar event listeners
+            setupEventListeners();
+        }
+
+        function setupEventListeners() {
+            // Navegação
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = link.getAttribute('data-page');
+                    
+                    if (state.user) {
+                        showPage(page);
+                    } else {
+                        showPage('auth');
+                        showNotification('Faça login para acessar esta página', 'info');
+                    }
+                });
+            });
+
+            // Tabs de autenticação
+            authTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabName = tab.getAttribute('data-tab');
+                    
+                    authTabs.forEach(t => t.classList.remove('active'));
+                    authForms.forEach(f => f.classList.remove('active'));
+                    
+                    tab.classList.add('active');
+                    document.getElementById(`${tabName}-form`).classList.add('active');
+                });
+            });
+
+            // Formulário de login
+            document.getElementById('login-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                
+                // Simulação de login
+                if (email && password) {
+                    state.user = {
+                        id: 1,
+                        name: 'Usuário Teste',
+                        email: email,
+                        phone: '(46) 99908-3346',
+                        birth: '1990-01-01',
+                        bio: 'Amante de livros e conhecimento.'
+                    };
+                    
+                    localStorage.setItem('ebookstore_user', JSON.stringify(state.user));
+                    showPage('home');
+                    showNotification('Login realizado com sucesso!', 'success');
+                    
+                    // Preencher formulário de perfil
+                    document.getElementById('profile-name').value = state.user.name;
+                    document.getElementById('profile-email').value = state.user.email;
+                    document.getElementById('profile-phone').value = state.user.phone;
+                    document.getElementById('profile-birth').value = state.user.birth;
+                    document.getElementById('profile-bio').value = state.user.bio;
+                } else {
+                    showNotification('Preencha todos os campos', 'error');
+                }
+            });
+
+            // Formulário de registro
+            document.getElementById('register-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('register-name').value;
+                const email = document.getElementById('register-email').value;
+                const password = document.getElementById('register-password').value;
+                const confirm = document.getElementById('register-confirm').value;
+                
+                if (name && email && password && confirm) {
+                    if (password !== confirm) {
+                        showNotification('As senhas não coincidem', 'error');
+                        return;
+                    }
+                    
+                    state.user = {
+                        id: 1,
+                        name: name,
+                        email: email,
+                        phone: '',
+                        birth: '',
+                        bio: ''
+                    };
+                    
+                    localStorage.setItem('ebookstore_user', JSON.stringify(state.user));
+                    showPage('home');
+                    showNotification('Conta criada com sucesso!', 'success');
+                    
+                    // Preencher formulário de perfil
+                    document.getElementById('profile-name').value = state.user.name;
+                    document.getElementById('profile-email').value = state.user.email;
+                } else {
+                    showNotification('Preencha todos os campos', 'error');
+                }
+            });
+
+            // Botão de usuário
+            document.getElementById('user-btn').addEventListener('click', () => {
+                if (state.user) {
+                    showPage('settings');
+                } else {
+                    showPage('auth');
+                }
+            });
+
+            // Botão do carrinho
+            document.getElementById('cart-btn').addEventListener('click', () => {
+                if (state.user) {
+                    showPage('cart');
+                } else {
+                    showPage('auth');
+                    showNotification('Faça login para acessar o carrinho', 'info');
+                }
+            });
+
+            // Alternar tema
+            themeToggle.addEventListener('click', toggleDarkMode);
+            darkModeToggle.addEventListener('change', toggleDarkMode);
+
+            // Menu de configurações
+            settingsMenuItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const section = item.getAttribute('data-section');
+                    
+                    settingsMenuItems.forEach(i => i.classList.remove('active'));
+                    settingsSections.forEach(s => s.classList.remove('active'));
+                    
+                    item.classList.add('active');
+                    document.getElementById(`${section}-section`).classList.add('active');
+                });
+            });
+
+            // Formulário de perfil
+            profileForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const name = document.getElementById('profile-name').value;
+                const email = document.getElementById('profile-email').value;
+                const phone = document.getElementById('profile-phone').value;
+                const birth = document.getElementById('profile-birth').value;
+                const bio = document.getElementById('profile-bio').value;
+                
+                state.user.name = name;
+                state.user.email = email;
+                state.user.phone = phone;
+                state.user.birth = birth;
+                state.user.bio = bio;
+                
+                localStorage.setItem('ebookstore_user', JSON.stringify(state.user));
+                showNotification('Perfil atualizado com sucesso!', 'success');
+            });
+
+            // Upload de foto de perfil
+            uploadPictureBtn.addEventListener('click', () => {
+                pictureInput.click();
+            });
+
+            pictureInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        profilePicture.src = event.target.result;
+                        profilePicture.style.display = 'block';
+                        profileIcon.style.display = 'none';
+                        
+                        // Salvar no estado
+                        state.user.profilePicture = event.target.result;
+                        localStorage.setItem('ebookstore_user', JSON.stringify(state.user));
+                        
+                        showNotification('Foto de perfil atualizada!', 'success');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Remover foto de perfil
+            removePictureBtn.addEventListener('click', () => {
+                profilePicture.style.display = 'none';
+                profileIcon.style.display = 'flex';
+                
+                // Remover do estado
+                delete state.user.profilePicture;
+                localStorage.setItem('ebookstore_user', JSON.stringify(state.user));
+                
+                showNotification('Foto de perfil removida!', 'success');
+            });
+
+            // Pesquisa
+            searchBtn.addEventListener('click', performSearch);
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+
+            // Opções de pagamento
+            paymentOptions.forEach(option => {
+                option.addEventListener('click', () => {
+                    paymentOptions.forEach(o => o.classList.remove('selected'));
+                    option.classList.add('selected');
+                });
+            });
+
+            // Finalizar compra
+            checkoutBtn.addEventListener('click', () => {
+                if (state.cart.length === 0) {
+                    showNotification('Adicione itens ao carrinho antes de finalizar a compra', 'error');
+                    return;
+                }
+                
+                paymentModal.classList.add('active');
+            });
+
+            // Fechar modal de pagamento
+            paymentClose.addEventListener('click', () => {
+                paymentModal.classList.remove('active');
+            });
+
+            // Formulário de pagamento
+            paymentForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                // Simulação de processamento de pagamento
+                showNotification('Pagamento processado com sucesso!', 'success');
+                
+                // Limpar carrinho
+                state.cart = [];
+                localStorage.setItem('ebookstore_cart', JSON.stringify(state.cart));
+                updateCartCount();
+                updateCartDisplay();
+                
+                // Fechar modal
+                paymentModal.classList.remove('active');
+                
+                // Redirecionar para página inicial após 2 segundos
+                setTimeout(() => {
+                    showPage('home');
+                }, 2000);
+            });
+        }
+
+        function showPage(pageName) {
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            document.getElementById(`${pageName}-page`).classList.add('active');
+            state.currentPage = pageName;
+        }
+
+        function toggleDarkMode() {
+            state.darkMode = !state.darkMode;
+            document.body.classList.toggle('dark-mode', state.darkMode);
+            
+            if (state.darkMode) {
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+            
+            localStorage.setItem('ebookstore_darkmode', state.darkMode);
+        }
+
+        function renderEbooks() {
+            // Ebooks em destaque (primeiros 4)
+            featuredEbooks.innerHTML = '';
+            ebooks.slice(0, 4).forEach(ebook => {
+                featuredEbooks.appendChild(createEbookCard(ebook));
+            });
+            
+            // Mais vendidos (últimos 4)
+            bestsellerEbooks.innerHTML = '';
+            ebooks.slice(4, 8).forEach(ebook => {
+                bestsellerEbooks.appendChild(createEbookCard(ebook));
+            });
+        }
+
+        function createEbookCard(ebook) {
+            const card = document.createElement('div');
+            card.className = 'ebook-card';
+            card.innerHTML = `
+                <div class="ebook-image">
+                    <i class="${ebook.icon}"></i>
+                </div>
+                <div class="ebook-content">
+                    <h3 class="ebook-title">${ebook.title}</h3>
+                    <p class="ebook-author">${ebook.author}</p>
+                    <p class="ebook-price">R$ ${ebook.price.toFixed(2)}</p>
+                    <div class="ebook-actions">
+                        <button class="btn btn-secondary btn-sm add-to-cart" data-id="${ebook.id}">
+                            <i class="fas fa-cart-plus"></i> Adicionar
+                        </button>
+                        <button class="btn btn-primary btn-sm view-details" data-id="${ebook.id}">
+                            <i class="fas fa-eye"></i> Detalhes
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Adicionar evento para o botão de adicionar ao carrinho
+            card.querySelector('.add-to-cart').addEventListener('click', () => {
+                addToCart(ebook);
+            });
+            
+            return card;
+        }
+
+        function addToCart(ebook) {
+            if (!state.user) {
+                showNotification('Faça login para adicionar itens ao carrinho', 'info');
+                showPage('auth');
+                return;
+            }
+            
+            const existingItem = state.cart.find(item => item.id === ebook.id);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                state.cart.push({
+                    ...ebook,
+                    quantity: 1
+                });
+            }
+            
+            localStorage.setItem('ebookstore_cart', JSON.stringify(state.cart));
+            updateCartCount();
+            updateCartDisplay();
+            showNotification(`${ebook.title} adicionado ao carrinho!`, 'success');
+        }
+
+        function updateCartCount() {
+            const totalItems = state.cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = totalItems;
+        }
+
+        function updateCartDisplay() {
+            cartItems.innerHTML = '';
+            
+            if (state.cart.length === 0) {
+                cartItems.innerHTML = '<p style="text-align: center; padding: 20px;">Seu carrinho está vazio</p>';
+                cartSubtotal.textContent = 'R$ 0,00';
+                cartDiscount.textContent = 'R$ 0,00';
+                cartShipping.textContent = 'R$ 0,00';
+                cartTotal.textContent = 'R$ 0,00';
+                return;
+            }
+            
+            let subtotal = 0;
+            
+            state.cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                subtotal += itemTotal;
+                
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.innerHTML = `
+                    <div class="cart-item-image">
+                        <i class="${item.icon}"></i>
+                    </div>
+                    <div class="cart-item-details">
+                        <h4 class="cart-item-title">${item.title}</h4>
+                        <p class="cart-item-author">${item.author}</p>
+                        <p class="cart-item-price">R$ ${item.price.toFixed(2)}</p>
+                    </div>
+                    <div class="cart-item-actions">
+                        <div class="quantity-control">
+                            <button class="quantity-btn decrease" data-id="${item.id}">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <span class="quantity">${item.quantity}</span>
+                            <button class="quantity-btn increase" data-id="${item.id}">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                        <button class="btn btn-danger btn-sm remove-item" data-id="${item.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                
+                cartItems.appendChild(cartItem);
+            });
+            
+            // Calcular totais
+            const discount = subtotal * 0.1; // 10% de desconto
+            const shipping = subtotal > 100 ? 0 : 9.90; // Frete grátis acima de R$ 100
+            const total = subtotal - discount + shipping;
+            
+            cartSubtotal.textContent = `R$ ${subtotal.toFixed(2)}`;
+            cartDiscount.textContent = `- R$ ${discount.toFixed(2)}`;
+            cartShipping.textContent = shipping === 0 ? 'Grátis' : `R$ ${shipping.toFixed(2)}`;
+            cartTotal.textContent = `R$ ${total.toFixed(2)}`;
+            
+            // Adicionar eventos para os botões de quantidade e remoção
+            document.querySelectorAll('.decrease').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = parseInt(btn.getAttribute('data-id'));
+                    updateCartItemQuantity(id, -1);
+                });
+            });
+            
+            document.querySelectorAll('.increase').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = parseInt(btn.getAttribute('data-id'));
+                    updateCartItemQuantity(id, 1);
+                });
+            });
+            
+            document.querySelectorAll('.remove-item').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const id = parseInt(btn.getAttribute('data-id'));
+                    removeFromCart(id);
+                });
+            });
+        }
+
+        function updateCartItemQuantity(id, change) {
+            const item = state.cart.find(item => item.id === id);
+            
+            if (item) {
+                item.quantity += change;
+                
+                if (item.quantity <= 0) {
+                    removeFromCart(id);
+                } else {
+                    localStorage.setItem('ebookstore_cart', JSON.stringify(state.cart));
+                    updateCartCount();
+                    updateCartDisplay();
+                }
+            }
+        }
+
+        function removeFromCart(id) {
+            state.cart = state.cart.filter(item => item.id !== id);
+            localStorage.setItem('ebookstore_cart', JSON.stringify(state.cart));
+            updateCartCount();
+            updateCartDisplay();
+            showNotification('Item removido do carrinho', 'info');
+        }
+
+        function performSearch() {
+            const query = searchInput.value.toLowerCase().trim();
+            
+            if (query === '') {
+                renderEbooks();
+                return;
+            }
+            
+            const filteredEbooks = ebooks.filter(ebook => 
+                ebook.title.toLowerCase().includes(query) || 
+                ebook.author.toLowerCase().includes(query) ||
+                ebook.category.toLowerCase().includes(query)
+            );
+            
+            featuredEbooks.innerHTML = '';
+            bestsellerEbooks.innerHTML = '';
+            
+            if (filteredEbooks.length === 0) {
+                featuredEbooks.innerHTML = '<p style="text-align: center; padding: 20px; grid-column: 1 / -1;">Nenhum ebook encontrado para sua pesquisa.</p>';
+                return;
+            }
+            
+            filteredEbooks.forEach(ebook => {
+                featuredEbooks.appendChild(createEbookCard(ebook));
+            });
+            
+            showNotification(`${filteredEbooks.length} ebooks encontrados`, 'info');
+        }
+
+        function showNotification(message, type) {
+            notification.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
