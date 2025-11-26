@@ -195,7 +195,7 @@
             padding: 30px;
             border-radius: 10px;
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             position: relative;
         }
@@ -217,6 +217,37 @@
             text-align: center;
             margin-bottom: 25px;
             color: var(--accent);
+        }
+
+        .form-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab-btn.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        .form-tab {
+            display: none;
+        }
+
+        .form-tab.active {
+            display: block;
         }
 
         .form-group {
@@ -242,6 +273,35 @@
         .form-control:focus {
             outline: none;
             border-color: var(--accent);
+        }
+
+        .password-strength {
+            margin-top: 5px;
+            font-size: 0.8rem;
+        }
+
+        .strength-weak { color: var(--danger); }
+        .strength-medium { color: var(--warning); }
+        .strength-strong { color: var(--accent); }
+
+        .form-message {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            text-align: center;
+            display: none;
+        }
+
+        .form-message.success {
+            background: rgba(15, 204, 69, 0.2);
+            border: 1px solid var(--accent);
+            display: block;
+        }
+
+        .form-message.error {
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid var(--danger);
+            display: block;
         }
 
         /* Products Section */
@@ -506,6 +566,19 @@
             font-weight: 500;
         }
 
+        .logout-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 5px;
+            margin-left: 10px;
+        }
+
+        .logout-btn:hover {
+            color: var(--danger);
+        }
+
         /* Footer */
         footer {
             background: rgba(0, 0, 0, 0.7);
@@ -629,6 +702,9 @@
                 <div class="user-profile" id="userProfile">
                     <div class="user-avatar" id="userAvatar">U</div>
                     <div class="user-name" id="userName">Usuário</div>
+                    <button class="logout-btn" id="logoutBtn" title="Sair">
+                        <i class="fas fa-sign-out-alt"></i>
+                    </button>
                 </div>
                 <button class="btn btn-outline" id="loginBtn">
                     <i class="fas fa-sign-in-alt"></i> Entrar
@@ -744,27 +820,55 @@
         </div>
     </section>
 
-    <!-- Login Modal -->
+    <!-- Login/Register Modal -->
     <div class="modal" id="loginModal">
         <div class="modal-content">
             <span class="close-modal" id="closeModal">&times;</span>
-            <h2>Entrar na Loja</h2>
-            <form id="loginForm">
+            <h2 id="modalTitle">Entrar na Loja</h2>
+            
+            <div class="form-tabs">
+                <button class="tab-btn active" data-tab="login">Login</button>
+                <button class="tab-btn" data-tab="register">Registrar</button>
+            </div>
+            
+            <div class="form-message" id="formMessage"></div>
+            
+            <!-- Formulário de Login -->
+            <form id="loginForm" class="form-tab active">
                 <div class="form-group">
-                    <label for="username">Usuário</label>
-                    <input type="text" id="username" class="form-control" placeholder="Digite seu usuário" required>
+                    <label for="loginUsername">Usuário</label>
+                    <input type="text" id="loginUsername" class="form-control" placeholder="Digite seu usuário" required>
                 </div>
                 <div class="form-group">
-                    <label for="password">Senha</label>
-                    <input type="password" id="password" class="form-control" placeholder="Digite sua senha" required>
+                    <label for="loginPassword">Senha</label>
+                    <input type="password" id="loginPassword" class="form-control" placeholder="Digite sua senha" required>
                 </div>
                 <button type="submit" class="btn btn-primary" style="width: 100%;">
                     <i class="fas fa-sign-in-alt"></i> Entrar
                 </button>
             </form>
-            <p style="text-align: center; margin-top: 20px; color: var(--text-secondary);">
-                Não tem conta? <a href="#" style="color: var(--accent);">Registre-se no servidor</a>
-            </p>
+            
+            <!-- Formulário de Registro -->
+            <form id="registerForm" class="form-tab">
+                <div class="form-group">
+                    <label for="registerUsername">Usuário *</label>
+                    <input type="text" id="registerUsername" class="form-control" placeholder="Escolha um nome de usuário" required minlength="3" maxlength="20">
+                    <small style="color: var(--text-secondary);">Mínimo 3 caracteres, apenas letras e números</small>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Senha *</label>
+                    <input type="password" id="registerPassword" class="form-control" placeholder="Crie uma senha segura" required minlength="7">
+                    <div class="password-strength" id="passwordStrength"></div>
+                    <small style="color: var(--text-secondary);">Mínimo 7 caracteres</small>
+                </div>
+                <div class="form-group">
+                    <label for="registerConfirmPassword">Confirmar Senha *</label>
+                    <input type="password" id="registerConfirmPassword" class="form-control" placeholder="Repita sua senha" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-user-plus"></i> Criar Conta
+                </button>
+            </form>
         </div>
     </div>
 
@@ -832,7 +936,7 @@
     </footer>
 
     <script>
-        // Dados da aplicação
+        // Sistema de usuários
         let currentUser = null;
         let cart = [];
         let selectedCoins = 0;
@@ -842,9 +946,11 @@
         const loginModal = document.getElementById('loginModal');
         const closeModal = document.getElementById('closeModal');
         const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
         const userProfile = document.getElementById('userProfile');
         const userAvatar = document.getElementById('userAvatar');
         const userName = document.getElementById('userName');
+        const logoutBtn = document.getElementById('logoutBtn');
         const cartBtn = document.getElementById('cartBtn');
         const cartSidebar = document.getElementById('cartSidebar');
         const closeCart = document.getElementById('closeCart');
@@ -854,6 +960,10 @@
         const coinsSelection = document.getElementById('coinsSelection');
         const addCoinsToCart = document.getElementById('addCoinsToCart');
         const checkoutBtn = document.getElementById('checkoutBtn');
+        const formMessage = document.getElementById('formMessage');
+        const passwordStrength = document.getElementById('passwordStrength');
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const formTabs = document.querySelectorAll('.form-tab');
 
         // Opções de coins
         const coinOptions = [50, 100, 200, 500, 1000, 2000];
@@ -863,15 +973,30 @@
             initializeCoinSelection();
             setupEventListeners();
             loadCartFromStorage();
+            checkSavedLogin();
             updateCartUI();
         });
+
+        // Verificar login salvo
+        function checkSavedLogin() {
+            const savedUser = localStorage.getItem('alfaCurrentUser');
+            const users = JSON.parse(localStorage.getItem('alfaUsers')) || [];
+            
+            if (savedUser) {
+                const user = users.find(u => u.username === savedUser);
+                if (user) {
+                    currentUser = user;
+                    updateUserInterface();
+                }
+            }
+        }
 
         // Configurar seleção de coins
         function initializeCoinSelection() {
             coinsSelection.innerHTML = '';
             
             coinOptions.forEach(coins => {
-                const price = coins; // 1 coin = R$ 1,00
+                const price = coins;
                 const option = document.createElement('div');
                 option.className = 'coin-option';
                 option.innerHTML = `
@@ -894,16 +1019,34 @@
 
         // Configurar event listeners
         function setupEventListeners() {
-            // Login
+            // Login/Register Modal
             loginBtn.addEventListener('click', () => {
                 loginModal.style.display = 'flex';
+                showFormTab('login');
             });
 
             closeModal.addEventListener('click', () => {
                 loginModal.style.display = 'none';
+                resetForms();
             });
 
+            // Tabs do formulário
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tab = button.getAttribute('data-tab');
+                    showFormTab(tab);
+                });
+            });
+
+            // Forms
             loginForm.addEventListener('submit', handleLogin);
+            registerForm.addEventListener('submit', handleRegister);
+
+            // Validação de senha em tempo real
+            document.getElementById('registerPassword').addEventListener('input', checkPasswordStrength);
+
+            // Logout
+            logoutBtn.addEventListener('click', handleLogout);
 
             // Carrinho
             cartBtn.addEventListener('click', () => {
@@ -927,7 +1070,6 @@
             addCoinsToCart.addEventListener('click', () => {
                 if (selectedCoins > 0) {
                     addToCart(`${selectedCoins} Coins`, selectedCoins);
-                    // Reset selection
                     document.querySelectorAll('.coin-option').forEach(opt => {
                         opt.classList.remove('selected');
                     });
@@ -943,44 +1085,195 @@
             window.addEventListener('click', (e) => {
                 if (e.target === loginModal) {
                     loginModal.style.display = 'none';
+                    resetForms();
                 }
             });
+        }
+
+        // Mostrar aba do formulário
+        function showFormTab(tab) {
+            tabButtons.forEach(button => {
+                button.classList.toggle('active', button.getAttribute('data-tab') === tab);
+            });
+            
+            formTabs.forEach(form => {
+                form.classList.toggle('active', form.id === `${tab}Form`);
+            });
+            
+            document.getElementById('modalTitle').textContent = 
+                tab === 'login' ? 'Entrar na Loja' : 'Criar Conta';
+            
+            formMessage.style.display = 'none';
+        }
+
+        // Verificar força da senha
+        function checkPasswordStrength() {
+            const password = document.getElementById('registerPassword').value;
+            let strength = '';
+            let strengthClass = '';
+            
+            if (password.length === 0) {
+                strength = '';
+            } else if (password.length < 7) {
+                strength = 'Senha muito curta';
+                strengthClass = 'strength-weak';
+            } else if (password.length < 10) {
+                strength = 'Senha média';
+                strengthClass = 'strength-medium';
+            } else {
+                strength = 'Senha forte';
+                strengthClass = 'strength-strong';
+            }
+            
+            passwordStrength.textContent = strength;
+            passwordStrength.className = `password-strength ${strengthClass}`;
+        }
+
+        // Manipular registro
+        function handleRegister(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('registerUsername').value.trim();
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            
+            // Validações
+            if (!username || !password || !confirmPassword) {
+                showMessage('Por favor, preencha todos os campos.', 'error');
+                return;
+            }
+            
+            if (username.length < 3) {
+                showMessage('O usuário deve ter pelo menos 3 caracteres.', 'error');
+                return;
+            }
+            
+            if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+                showMessage('O usuário só pode conter letras, números e underline.', 'error');
+                return;
+            }
+            
+            if (password.length < 7) {
+                showMessage('A senha deve ter pelo menos 7 caracteres.', 'error');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showMessage('As senhas não coincidem.', 'error');
+                return;
+            }
+            
+            // Verificar se usuário já existe
+            const users = JSON.parse(localStorage.getItem('alfaUsers')) || [];
+            if (users.find(u => u.username.toLowerCase() === username.toLowerCase())) {
+                showMessage('Este usuário já está em uso. Escolha outro.', 'error');
+                return;
+            }
+            
+            // Registrar usuário
+            const newUser = {
+                username: username,
+                password: password,
+                registrationDate: new Date().toISOString(),
+                lastLogin: new Date().toISOString()
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('alfaUsers', JSON.stringify(users));
+            
+            // Login automático
+            currentUser = newUser;
+            localStorage.setItem('alfaCurrentUser', username);
+            updateUserInterface();
+            
+            showMessage('Conta criada com sucesso! Você está logado.', 'success');
+            
+            setTimeout(() => {
+                loginModal.style.display = 'none';
+                resetForms();
+            }, 2000);
         }
 
         // Manipular login
         function handleLogin(e) {
             e.preventDefault();
             
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
             
-            // Simulação de login (em um sistema real, isso seria uma requisição para o servidor)
-            if (username && password) {
-                currentUser = {
-                    username: username,
-                    initial: username.charAt(0).toUpperCase()
-                };
+            if (!username || !password) {
+                showMessage('Por favor, preencha todos os campos.', 'error');
+                return;
+            }
+            
+            const users = JSON.parse(localStorage.getItem('alfaUsers')) || [];
+            const user = users.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                user.lastLogin = new Date().toISOString();
+                localStorage.setItem('alfaUsers', JSON.stringify(users));
+                localStorage.setItem('alfaCurrentUser', username);
                 
-                userAvatar.textContent = currentUser.initial;
+                updateUserInterface();
+                showMessage(`Bem-vindo de volta, ${username}!`, 'success');
+                
+                setTimeout(() => {
+                    loginModal.style.display = 'none';
+                    resetForms();
+                }, 1500);
+            } else {
+                showMessage('Usuário ou senha incorretos. Verifique suas credenciais.', 'error');
+            }
+        }
+
+        // Manipular logout
+        function handleLogout() {
+            currentUser = null;
+            localStorage.removeItem('alfaCurrentUser');
+            
+            userProfile.style.display = 'none';
+            loginBtn.style.display = 'flex';
+            
+            // Limpar carrinho ao deslogar
+            cart = [];
+            saveCartToStorage();
+            updateCartUI();
+            
+            alert('Você saiu da sua conta.');
+        }
+
+        // Atualizar interface do usuário
+        function updateUserInterface() {
+            if (currentUser) {
+                userAvatar.textContent = currentUser.username.charAt(0).toUpperCase();
                 userName.textContent = currentUser.username;
                 userProfile.style.display = 'flex';
                 loginBtn.style.display = 'none';
-                
-                loginModal.style.display = 'none';
-                loginForm.reset();
-                
-                // Mostrar mensagem de sucesso
-                alert(`Bem-vindo, ${username}!`);
-            } else {
-                alert('Por favor, preencha todos os campos.');
             }
+        }
+
+        // Mostrar mensagens no formulário
+        function showMessage(message, type) {
+            formMessage.textContent = message;
+            formMessage.className = `form-message ${type}`;
+            formMessage.style.display = 'block';
+        }
+
+        // Resetar formulários
+        function resetForms() {
+            loginForm.reset();
+            registerForm.reset();
+            formMessage.style.display = 'none';
+            passwordStrength.textContent = '';
         }
 
         // Adicionar item ao carrinho
         function addToCart(product, price) {
             if (!currentUser) {
-                alert('Por favor, faça login para adicionar itens ao carrinho.');
+                showMessage('Por favor, faça login para adicionar itens ao carrinho.', 'error');
                 loginModal.style.display = 'flex';
+                showFormTab('login');
                 return;
             }
             
@@ -988,10 +1281,7 @@
             saveCartToStorage();
             updateCartUI();
             
-            // Mostrar feedback
             alert(`${product} adicionado ao carrinho!`);
-            
-            // Abrir carrinho automaticamente
             cartSidebar.classList.add('open');
         }
 
@@ -1004,10 +1294,7 @@
 
         // Atualizar interface do carrinho
         function updateCartUI() {
-            // Atualizar contador
             cartCount.textContent = cart.length;
-            
-            // Atualizar lista de itens
             cartBody.innerHTML = '';
             
             if (cart.length === 0) {
@@ -1038,7 +1325,6 @@
                     cartBody.appendChild(cartItem);
                 });
                 
-                // Adicionar event listeners para botões de remover
                 document.querySelectorAll('.cart-item-remove').forEach(button => {
                     button.addEventListener('click', function() {
                         const index = parseInt(this.getAttribute('data-index'));
@@ -1046,7 +1332,6 @@
                     });
                 });
                 
-                // Atualizar total
                 cartTotal.textContent = `R$ ${total.toFixed(2)}`;
             }
         }
@@ -1059,17 +1344,16 @@
             }
             
             if (!currentUser) {
-                alert('Por favor, faça login para finalizar a compra.');
+                showMessage('Por favor, faça login para finalizar a compra.', 'error');
                 loginModal.style.display = 'flex';
+                showFormTab('login');
                 return;
             }
             
             const total = cart.reduce((sum, item) => sum + item.price, 0);
             
-            // Simulação de processamento de pagamento
             alert(`Compra finalizada com sucesso!\nTotal: R$ ${total.toFixed(2)}\n\nEm um sistema real, aqui seria integrado com um gateway de pagamento.`);
             
-            // Limpar carrinho
             cart = [];
             saveCartToStorage();
             updateCartUI();
@@ -1078,14 +1362,18 @@
 
         // Salvar carrinho no localStorage
         function saveCartToStorage() {
-            localStorage.setItem('alfaRoleplayCart', JSON.stringify(cart));
+            if (currentUser) {
+                const userCart = JSON.parse(localStorage.getItem('alfaUserCarts')) || {};
+                userCart[currentUser.username] = cart;
+                localStorage.setItem('alfaUserCarts', JSON.stringify(userCart));
+            }
         }
 
         // Carregar carrinho do localStorage
         function loadCartFromStorage() {
-            const savedCart = localStorage.getItem('alfaRoleplayCart');
-            if (savedCart) {
-                cart = JSON.parse(savedCart);
+            if (currentUser) {
+                const userCart = JSON.parse(localStorage.getItem('alfaUserCarts')) || {};
+                cart = userCart[currentUser.username] || [];
             }
         }
     </script>
